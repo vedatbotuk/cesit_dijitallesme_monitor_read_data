@@ -37,20 +37,43 @@ else:
 # TODO logging
 
 
+def unix_time_to_hhmm(unix_time):
+    """ Description """
+    return '{0:02.0f}:{1:02.0f}'.format(*divmod(unix_time / 60, 60))
+
+
+def unix_time_to_date(unix_time):
+    """ Description """
+    return unix_time.strftime("%d-%b-%Y (%H:%M:%S)")
+
+
 def main():
+    """ Description """
     global DEVICE_NAMES
     for x in ip_addresses:
         url = 'http://' + x + '/data.json'
         try:
             get_url = requests.get(url, timeout=TIMEOUT)
             get_data = json.loads(get_url.text)[0]
-            device_name = get_data["_id"]
+            device_name = get_data['_id']
+
+            reset_time = get_data['Son Reset Tarihi']
+            run_time = get_data['Çalışma süresi']
+            speed = get_data['Çalışma hızı']
+            remainder_time = get_data['Tahmini kalan süre']
 
             DEVICE_NAMES.update({x: device_name})
 
             data_master['Devices'][device_name] = get_data
+
+            data_master['Devices'][device_name]['Son Reset Tarihi'] = unix_time_to_date(reset_time)
+            data_master['Devices'][device_name]['Çalışma süresi'] = unix_time_to_hhmm(run_time)
+            data_master['Devices'][device_name]['Çalışma hızı'] = str(round(speed * 60, 1)) + ' düğüm/dakika'
+            data_master['Devices'][device_name]['Tahmini kalan süre'] = unix_time_to_hhmm(remainder_time)
+
             data_master['Devices'][device_name]['Status'] = 'Connected'
             data_master['Devices'][device_name]['IP-Address'] = x
+
         except Exception as e:
             if x in DEVICE_NAMES:
                 data_master['Devices'][DEVICE_NAMES[x]]['Status'] = 'Not connected'
