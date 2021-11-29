@@ -3,6 +3,7 @@
 """ Description """
 
 from time import sleep
+from datetime import datetime
 import classes
 import json
 import requests
@@ -44,6 +45,7 @@ def unix_time_to_hhmm(unix_time):
 
 def unix_time_to_date(unix_time):
     """ Description """
+    unix_time = datetime.fromtimestamp(unix_time)
     return unix_time.strftime("%d-%b-%Y (%H:%M:%S)")
 
 
@@ -66,9 +68,9 @@ def main():
 
             data_master['Devices'][device_name] = get_data
 
-            # data_master['Devices'][device_name]['Son Reset Tarihi'] = unix_time_to_date(reset_time)
+            data_master['Devices'][device_name]['Son Reset Tarihi'] = unix_time_to_date(reset_time)
             data_master['Devices'][device_name]['Çalışma süresi'] = unix_time_to_hhmm(run_time)
-            data_master['Devices'][device_name]['Çalışma hızı'] = str(round(speed * 60, 1)) + ' düğüm/dakika'
+            data_master['Devices'][device_name]['Çalışma hızı'] = str(round(speed, 1)) + ' düğüm/dakika'
             data_master['Devices'][device_name]['Tahmini kalan süre'] = unix_time_to_hhmm(remainder_time)
 
             data_master['Devices'][device_name]['Status'] = 'Connected'
