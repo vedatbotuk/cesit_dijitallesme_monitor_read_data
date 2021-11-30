@@ -70,7 +70,10 @@ def main():
 
             data_master['Devices'][device_name]['Son Reset Tarihi'] = unix_time_to_date(reset_time)
             data_master['Devices'][device_name]['Çalışma süresi'] = unix_time_to_hhmm(run_time)
-            data_master['Devices'][device_name]['Çalışma hızı'] = str(round(60 / speed, 1)) + ' düğüm/dakika'
+            try:
+                data_master['Devices'][device_name]['Çalışma hızı'] = str(round(60 / speed, 1)) + ' düğüm/dakika'
+            except ZeroDivisionError:
+                data_master['Devices'][device_name]['Çalışma hızı'] = '0.0' + ' düğüm/dakika'
             data_master['Devices'][device_name]['Tahmini kalan süre'] = unix_time_to_hhmm(remainder_time)
 
             data_master['Devices'][device_name]['Status'] = 'Connected'
@@ -78,6 +81,7 @@ def main():
 
         except Exception as e:
             if x in DEVICE_NAMES:
+                print(e)
                 data_master['Devices'][DEVICE_NAMES[x]]['Status'] = 'Not connected'
 
 
