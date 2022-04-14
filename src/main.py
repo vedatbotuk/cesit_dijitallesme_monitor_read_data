@@ -16,11 +16,15 @@ CONFIG_JSON = classes.get_setup()
 DEVICE_NAMES = {}
 data_master = {}
 
-ip_addresses = CONFIG_JSON['device_ips']
+# ip_addresses = CONFIG_JSON['device_ips']
 TIMEOUT = CONFIG_JSON['request_timeout']
 LOOP_SLEEP = CONFIG_JSON['loop_sleep']
 PATH_MASTER = CONFIG_JSON['path_data_master']
 
+macs = ['b8:27:eb:47:16:92', 'b8:27:eb:55:ea:75']
+ip_addresses = classes.find_ip_address_for_mac_address(macs, '192.168.1.0/24')
+print(ip_addresses)
+# exit()
 
 if path_exists.isfile(PATH_MASTER):
     try:

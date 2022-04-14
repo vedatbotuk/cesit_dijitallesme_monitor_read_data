@@ -3,3 +3,4 @@
 """ Description """
 
 from .get_setup import *
+from .find_devices import *
