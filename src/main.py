@@ -23,7 +23,6 @@ PATH_MASTER = CONFIG_JSON['path_data_master']
 
 macs = ['b8:27:eb:47:16:92', 'b8:27:eb:55:ea:75']
 ip_addresses = classes.find_ip_address_for_mac_address(macs, '192.168.1.0/24')
-print(ip_addresses)
 # exit()
 
 if path_exists.isfile(PATH_MASTER):
@@ -44,7 +43,12 @@ else:
 
 def unix_time_to_hhmm(unix_time):
     """ Description """
-    return '{0:02.0f}:{1:02.0f}'.format(*divmod(unix_time / 60, 60))
+    hhmm = ['{0:1.0f}'.format(*divmod(unix_time / 60, 60)), '{1:1.0f}'.format(*divmod(unix_time / 60, 60))]
+    if hhmm == '0':
+        return hhmm[1] + ' dakika'
+    else:
+        return hhmm[0] + ' saat, ' + hhmm[1] + ' dakika'
+    # return hhmm
 
 
 def unix_time_to_date(unix_time):
